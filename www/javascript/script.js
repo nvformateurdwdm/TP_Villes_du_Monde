@@ -15,7 +15,7 @@ const SearchInputEventNames = {
     CLEAR_SEARCH_INPUT: "clear_search_input"
 }
 
-class SearchInputEvent extends CustomEvent {
+class SearchInputEvent extends Custom {
     constructor(type, options) {
         super(type, options);
     }

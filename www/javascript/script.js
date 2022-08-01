@@ -14,7 +14,7 @@ class WorldCities extends AbstractApp {
 
     init(dataSource) {
         this.initTowns(dataSource);
-        
+        this.loadTown(0);
         super.init(dataSource);
     }
 
@@ -28,11 +28,54 @@ class WorldCities extends AbstractApp {
     }
 
     loadTown(index){
+        const town = this.baseTowns[index];
+       
+        const leftContainerDiv = this.containerDiv.querySelector("#left_container");
+        const leftContainerDivH2 = leftContainerDiv.querySelector("h2");
+        const desc = this.containerDiv.querySelector("#desc");
 
+        const rightContainerDiv = this.containerDiv.querySelector("#right_container");
+        const townNameDiv = this.containerDiv.querySelector("#town_name");
+        const townNameDivH3 = townNameDiv.querySelector("h3");
+        const townNameDivH4 = townNameDiv.querySelector("h4");
+
+
+        leftContainerDivH2.innerHTML = '<a href="' + town.link + '" target="blank">' + town.name + '</a>';
+        desc.innerHTML = town.description;
+
+        townNameDivH3.textContent = town.name;
+        const sup = town.region == "" ? town.state : town.region;
+        townNameDivH4.innerHTML = '<i>' + town.country + ", " + sup + '</i>';
+
+        this.loadGallery(town.images);
+
+        const townMiscRight = this.containerDiv.querySelector("#town_misc_content_right");
+        const ulMajor = townMiscRight.querySelectorAll("li")[0];
+        const ulInhabitants = townMiscRight.querySelectorAll("li")[1];
+
+        ulMajor.textContent = town.major;
+        ulInhabitants.textContent = town.inhabitants;
+        
     }
 
     loadGallery(images){
+        const gallery = this.containerDiv.querySelector("#gallery");
+        const galleryDivs = gallery.querySelectorAll("div");
+        for (const div of galleryDivs) {
+            div.remove();
+        }
+        for (const image of images) {
+            const div = document.createElement("div");
+            const img = document.createElement("img");
+            img.src = "images/" + image.url;
+            img.className = "gallery_img";
+            div.appendChild(img);
 
+            const h6 = document.createElement("h6");
+            h6.textContent = image.caption;
+            div.appendChild(h6);
+            gallery.appendChild(div);
+        }
     }
 
     searchInputHandler(){

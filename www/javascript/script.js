@@ -14,6 +14,7 @@ class WorldCities extends AbstractApp {
 
     init(dataSource) {
         this.initTowns(dataSource);
+        this.initIndexer();
         this.loadTown(0);
         super.init(dataSource);
     }
@@ -103,7 +104,10 @@ class WorldCities extends AbstractApp {
     }
 
     initIndexer(){
-
+        const optionsDiv = this.containerDiv.querySelector("#options");
+        this.indexer = new Indexer(optionsDiv, this.baseTowns.length, indexerMode.LOOP);
+        console.log(this.indexer);
+        
     }
 }
 
@@ -180,7 +184,8 @@ class Indexer extends AbstractUIComponent {
         super(UIView);
 
         // Codez ici les propriétés définies dans le diagramme de classes.
-        this.total;
+        this.total = total;
+        this.index = 0;
         this.indexerMode = mode;
         this.nextBtn;
         this.previousBtn;
@@ -208,12 +213,15 @@ class Indexer extends AbstractUIComponent {
 
     init() {
         // Appelez ici les méthodes d'initialisation du composant décrites dans le diagrammes de classe.
+        this.initButtons();
         super.init();
     }
 
     // Adaptation en méthode de la fonction du TP Citations. Déjà codée pour vous. :)
     changeIndex(direction) {
         direction == indexerDirection.NEXT ? this.index++ : this.index--;
+        console.log("this.index", this.index);
+        
         this.checkIndex();
     }
 
@@ -242,6 +250,18 @@ class Indexer extends AbstractUIComponent {
 
     initButtons() {
         // Codez cette méthode. Adaptation en classe du TP Citation.
+        const nextDiv = this.UIView.querySelector("#next");
+        const previousDiv = this.UIView.querySelector("#previous");
+        const divs = [nextDiv, previousDiv];
+        for (const div of divs) {
+            console.log("div", div);
+            
+            const indexerBtn = new IndexerButton(div);
+            indexerBtn.addEventListener(EventNames.CLICK, function () {
+                this.changeIndex(indexerBtn.buttonDiv == nextDiv ? indexerDirection.NEXT : indexerDirection.PREVIOUS);
+            }.bind(this));
+            indexerBtn.disable(false);
+        }
     }
 
 }
@@ -253,7 +273,7 @@ class IndexerButton extends AbstractButton {
 
     disable(bool = true) {
         // Codez cette méthode pour changer la couleur des boutons via la classe CSS. Adaptation en classe du TP Citation.
-        buttonDiv.className = bool ? "disabled" : "buttonNextPrevious";
+        // buttonDiv.className = bool ? "disabled" : "buttonNextPrevious";
         super.disable(bool);
     }
 }

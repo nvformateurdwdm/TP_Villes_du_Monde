@@ -100,14 +100,16 @@ class WorldCities extends AbstractApp {
     }
 
     indexerIndexChangeHandler(){
-
+        this.loadTown(this.indexer.index);
     }
 
     initIndexer(){
         const optionsDiv = this.containerDiv.querySelector("#options");
         this.indexer = new Indexer(optionsDiv, this.baseTowns.length, indexerMode.LOOP);
         console.log(this.indexer);
-        
+        this.indexer.addEventListener(IndexerEventNames.INDEX_CHANGED, function(){
+            this.indexerIndexChangeHandler();
+        }.bind(this));
     }
 }
 
@@ -220,13 +222,32 @@ class Indexer extends AbstractUIComponent {
     // Adaptation en méthode de la fonction du TP Citations. Déjà codée pour vous. :)
     changeIndex(direction) {
         direction == indexerDirection.NEXT ? this.index++ : this.index--;
-        console.log("this.index", this.index);
         
         this.checkIndex();
     }
 
     checkIndex() {
         // Codez cette méthode. Adaptation en classe du TP Citation.
+        const min = 0;
+        const max = this.total - 1;
+
+        if (this.index < min) {
+            this.index = max;
+        }
+
+        if (this.index > max) {
+            this.index = min;
+        }
+
+        // if (next.disabled) {
+        //     disableButton(next, false);
+        // }
+
+        // if (previous.disabled) {
+        //     disableButton(previous, false);
+        // }
+        console.log("this.index", this.index);
+        this.dispatchEvent(new IndexerEvent(IndexerEventNames.INDEX_CHANGED));
     }
 
     setNumbers() {

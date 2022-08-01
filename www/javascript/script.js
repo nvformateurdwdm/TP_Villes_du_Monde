@@ -13,12 +13,18 @@ class WorldCities extends AbstractApp {
     }
 
     init(dataSource) {
-        // Codez cette méthode pour traiter le fichier chargé et initialiser la classe.
+        this.initTowns(dataSource);
+        
         super.init(dataSource);
     }
 
     initTowns(dataSource){
+        for (const town of dataSource.towns) {
+            // console.log(town);
 
+            const city = new City(town);
+            this.baseTowns.push(city);
+        }
     }
 
     loadTown(index){

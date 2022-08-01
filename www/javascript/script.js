@@ -40,7 +40,6 @@ class WorldCities extends AbstractApp {
         const townNameDivH3 = townNameDiv.querySelector("h3");
         const townNameDivH4 = townNameDiv.querySelector("h4");
 
-
         leftContainerDivH2.innerHTML = '<a href="' + town.link + '" target="blank">' + town.name + '</a>';
         desc.innerHTML = town.description;
 
@@ -56,7 +55,6 @@ class WorldCities extends AbstractApp {
 
         ulMajor.textContent = town.major;
         ulInhabitants.textContent = town.inhabitants;
-        
     }
 
     loadGallery(images){
@@ -68,7 +66,7 @@ class WorldCities extends AbstractApp {
         for (const image of images) {
             const div = document.createElement("div");
             const img = document.createElement("img");
-            img.src = "images/" + image.url;
+            img.src = "image/" + image.url;
             img.className = "gallery_img";
             div.appendChild(img);
 
@@ -239,14 +237,6 @@ class Indexer extends AbstractUIComponent {
             this.index = min;
         }
 
-        // if (next.disabled) {
-        //     disableButton(next, false);
-        // }
-
-        // if (previous.disabled) {
-        //     disableButton(previous, false);
-        // }
-        console.log("this.index", this.index);
         this.dispatchEvent(new IndexerEvent(IndexerEventNames.INDEX_CHANGED));
     }
 

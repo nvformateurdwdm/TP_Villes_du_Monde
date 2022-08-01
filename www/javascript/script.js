@@ -2,11 +2,59 @@ class WorldCities extends AbstractApp {
     constructor(containerDiv) {
         super(containerDiv);
 
+        this.baseTowns = [];
+        this.towns = [];
+        this.indexer;
+        this.searchIpt;
+    }
+
+    set index(value){
+
     }
 
     init(dataSource) {
         // Codez cette méthode pour traiter le fichier chargé et initialiser la classe.
         super.init(dataSource);
+    }
+
+    initTowns(dataSource){
+
+    }
+
+    loadTown(index){
+
+    }
+
+    loadGallery(images){
+
+    }
+
+    searchInputHandler(){
+
+    }
+
+    clearSearchInputHandler(){
+
+    }
+
+    refresh(){
+
+    }
+
+    filterElement(arr, filter){
+
+    }
+
+    initInput(){
+
+    }
+
+    indexerIndexChangeHandler(){
+
+    }
+
+    initIndexer(){
+
     }
 }
 
@@ -26,11 +74,17 @@ class SearchInput extends AbstractUIComponent {
         super(UIView);
 
         // Codez ici les propriétés définies dans le diagramme de classes.
+        this.boundSearchInputHandler;
+        this.boundClearSearchHandler;
         this.init();
     }
 
     get value() {
         return super.value;
+    }
+
+    set value(value){
+
     }
 
     searchInputHandler() {
@@ -47,6 +101,7 @@ class SearchInput extends AbstractUIComponent {
 
     init() {
         // Appelez ici les méthodes d'initialisation du composant décrites dans le diagrammes de classe.
+
         super.init();
     }
 }
@@ -76,6 +131,10 @@ class Indexer extends AbstractUIComponent {
         super(UIView);
 
         // Codez ici les propriétés définies dans le diagramme de classes.
+        this.total;
+        this.indexerMode = mode;
+        this.nextBtn;
+        this.previousBtn;
         this.init();
     }
 
@@ -145,6 +204,7 @@ class IndexerButton extends AbstractButton {
 
     disable(bool = true) {
         // Codez cette méthode pour changer la couleur des boutons via la classe CSS. Adaptation en classe du TP Citation.
+        buttonDiv.className = bool ? "disabled" : "buttonNextPrevious";
         super.disable(bool);
     }
 }

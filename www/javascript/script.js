@@ -214,6 +214,7 @@ class Indexer extends AbstractUIComponent {
     init() {
         // Appelez ici les méthodes d'initialisation du composant décrites dans le diagrammes de classe.
         this.initButtons();
+        this.setNumbers();
         super.init();
     }
 
@@ -237,11 +238,16 @@ class Indexer extends AbstractUIComponent {
             this.index = min;
         }
 
+        this.setNumbers();
         this.dispatchEvent(new IndexerEvent(IndexerEventNames.INDEX_CHANGED));
     }
 
     setNumbers() {
         // Codez cette méthode. Adaptation en classe du TP Citation.
+        const indexDiv = this.UIView.querySelector("#index");
+        indexDiv.textContent = this.getZeroFormat(this.index + 1, this.total) + "/" + this.total;
+        
+        
     }
 
     // Adaptation en méthode de la fonction du TP Citations. Déjà codée pour vous. :)

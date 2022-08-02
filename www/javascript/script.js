@@ -99,7 +99,8 @@ class WorldCities extends AbstractApp {
     }
 
     clearSearchInputHandler() {
-
+        this.towns = [...this.baseTowns];
+        this.refresh();
     }
 
     refresh() {
@@ -121,7 +122,9 @@ class WorldCities extends AbstractApp {
         this.searchIpt.addEventListener(SearchInputEventNames.SEARCH_INPUT, function () {
             this.searchInputHandler();
         }.bind(this));
-
+        this.searchIpt.addEventListener(SearchInputEventNames.CLEAR_SEARCH_INPUT, function () {
+            this.clearSearchInputHandler();
+        }.bind(this));
     }
 
     indexerIndexChangeHandler() {
@@ -154,8 +157,10 @@ class SearchInput extends AbstractUIComponent {
 
         // Codez ici les propriétés définies dans le diagramme de classes.
         this.boundSearchInputHandler = this.searchInputHandler.bind(this);
+        this.boundClearSearchHandler = this.clearSearchHandler.bind(this);
 
-        this.boundClearSearchHandler;
+        this.clearSearchIptBtn;
+
         this.init();
     }
 
@@ -169,21 +174,34 @@ class SearchInput extends AbstractUIComponent {
 
     searchInputHandler(evt) {
         // Codez cette méthode. Adaptation en classe du TP Citation.
+        this.checkClearButton();
         this.dispatchEvent(new SearchInputEvent(SearchInputEventNames.SEARCH_INPUT));
     }
 
     clearSearchHandler() {
         // Codez cette méthode. Adaptation en classe du TP Citation.
+        this.searchIpt.value = "";
+        this.dispatchEvent(new SearchInputEvent(SearchInputEventNames.CLEAR_SEARCH_INPUT));
     }
 
     checkClearButton() {
         // Codez cette méthode. Adaptation en classe du TP Citation.
+        if (this.searchIpt.value != "") {
+            this.clearSearchIptBtn.disabled = false;
+            this.clearSearchIptBtn.addEventListener(EventNames.CLICK, this.boundClearSearchHandler);
+        } else {
+            this.clearSearchIptBtn.disabled = true;
+            this.clearSearchIptBtn.removeEventListener(EventNames.CLICK, this.boundClearSearchHandler);
+        }
     }
 
     init() {
         // Appelez ici les méthodes d'initialisation du composant décrites dans le diagrammes de classe.
         this.searchIpt = this.UIView.querySelector("#search_ipt");
+        this.clearSearchIptBtn = this.UIView.querySelector("#clear_search_ipt_btn");
         this.searchIpt.addEventListener(EventNames.INPUT, this.boundSearchInputHandler);
+
+        this.checkClearButton();
 
         super.init();
     }

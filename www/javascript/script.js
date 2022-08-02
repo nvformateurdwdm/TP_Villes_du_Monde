@@ -21,11 +21,16 @@ class WorldCities extends AbstractApp {
     }
 
     initTowns(dataSource) {
-        for (const town of dataSource.towns) {
-            const city = new City(town);
-            this.baseTowns.push(city);
+        const limit = debug ? 30 : 1;
+        let i = 0;
+        while (i < limit) {
+            for (const town of dataSource.towns) {
+                const city = new City(town);
+                this.baseTowns.push(city);
+            }
+            this.towns = [...this.baseTowns]; 
+            i++;  
         }
-        this.towns = [...this.baseTowns];
     }
 
     loadTown(index) {

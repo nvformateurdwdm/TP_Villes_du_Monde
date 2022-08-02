@@ -22,8 +22,6 @@ class WorldCities extends AbstractApp {
 
     initTowns(dataSource){
         for (const town of dataSource.towns) {
-            // console.log(town);
-
             const city = new City(town);
             this.baseTowns.push(city);
         }
@@ -84,7 +82,6 @@ class WorldCities extends AbstractApp {
         const value = this.searchIpt.UIView.querySelector("#search_ipt").value;
         
         this.towns = this.filterElement(this.baseTowns, value);
-        console.log("this.towns", this.towns);
         this.refresh();
     }
 
@@ -99,8 +96,6 @@ class WorldCities extends AbstractApp {
     }
 
     filterElement(arr, filter){
-        console.log("filter", filter);
-        
         return arr.filter(function (element) {
             const townName = element.name;
             const bool = townName.toLowerCase().includes(filter.toLowerCase());
@@ -122,7 +117,6 @@ class WorldCities extends AbstractApp {
     initIndexer(){
         const optionsDiv = this.containerDiv.querySelector("#options");
         this.indexer = new Indexer(optionsDiv, this.towns.length, indexerMode.LOOP);
-        console.log(this.indexer);
         this.indexer.addEventListener(IndexerEventNames.INDEX_CHANGED, function(){
             this.indexerIndexChangeHandler();
         }.bind(this));
@@ -161,7 +155,6 @@ class SearchInput extends AbstractUIComponent {
 
     searchInputHandler(evt) {
         // Codez cette méthode. Adaptation en classe du TP Citation.
-        console.log(this);
         this.dispatchEvent(new SearchInputEvent(SearchInputEventNames.SEARCH_INPUT));
     }
 
@@ -294,8 +287,6 @@ class Indexer extends AbstractUIComponent {
         const previousDiv = this.UIView.querySelector("#previous");
         const divs = [nextDiv, previousDiv];
         for (const div of divs) {
-            console.log("div", div);
-            
             const indexerBtn = new IndexerButton(div);
             indexerBtn.addEventListener(EventNames.CLICK, function () {
                 this.changeIndex(indexerBtn.buttonDiv == nextDiv ? indexerDirection.NEXT : indexerDirection.PREVIOUS);

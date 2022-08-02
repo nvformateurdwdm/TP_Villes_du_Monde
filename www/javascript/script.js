@@ -64,7 +64,7 @@ class WorldCities extends AbstractApp {
             const ulInhabitants = townMiscRight.querySelectorAll("li")[1];
 
             ulMajor.textContent = town.major;
-            ulInhabitants.textContent = town.inhabitants;
+            ulInhabitants.textContent = formatNumber(parseInt(town.inhabitants));
         }
 
 
@@ -388,6 +388,11 @@ function appInitHandler(evt) {
  */
 function checkIndex() {
     // Codez cette fonction.
+}
+
+function formatNumber(num, locale = "fr-FR"){
+    const numberFormat = new Intl.NumberFormat(locale);
+    return numberFormat.format(num);
 }
 
 // App déjà instanciée pour vous. Ne rien toucher.

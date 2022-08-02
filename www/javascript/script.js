@@ -8,7 +8,7 @@ class WorldCities extends AbstractApp {
         this.searchIpt;
     }
 
-    set index(value){
+    set index(value) {
 
     }
 
@@ -20,45 +20,52 @@ class WorldCities extends AbstractApp {
         super.init(dataSource);
     }
 
-    initTowns(dataSource){
+    initTowns(dataSource) {
         for (const town of dataSource.towns) {
             const city = new City(town);
             this.baseTowns.push(city);
         }
         this.towns = [...this.baseTowns];
-        
     }
 
-    loadTown(index){
-        const town = this.towns[index];
-       
-        const leftContainerDiv = this.containerDiv.querySelector("#left_container");
-        const leftContainerDivH2 = leftContainerDiv.querySelector("h2");
-        const desc = this.containerDiv.querySelector("#desc");
+    loadTown(index) {
+        const errorDiv = this.containerDiv.querySelector("#error");
+        errorDiv.textContent = "";
+        if (index == -1) {
+            errorDiv.textContent = "Aucun résultat";
+        } else {
+            const town = this.towns[index];
 
-        const rightContainerDiv = this.containerDiv.querySelector("#right_container");
-        const townNameDiv = this.containerDiv.querySelector("#town_name");
-        const townNameDivH3 = townNameDiv.querySelector("h3");
-        const townNameDivH4 = townNameDiv.querySelector("h4");
+            const leftContainerDiv = this.containerDiv.querySelector("#left_container");
+            const leftContainerDivH2 = leftContainerDiv.querySelector("h2");
+            const desc = this.containerDiv.querySelector("#desc");
 
-        leftContainerDivH2.innerHTML = '<a href="' + town.link + '" target="blank">' + town.name + '</a>';
-        desc.innerHTML = town.description;
+            const rightContainerDiv = this.containerDiv.querySelector("#right_container");
+            const townNameDiv = this.containerDiv.querySelector("#town_name");
+            const townNameDivH3 = townNameDiv.querySelector("h3");
+            const townNameDivH4 = townNameDiv.querySelector("h4");
 
-        townNameDivH3.textContent = town.name;
-        const sup = town.region == "" ? town.state : town.region;
-        townNameDivH4.innerHTML = '<i>' + town.country + ", " + sup + '</i>';
+            leftContainerDivH2.innerHTML = '<a href="' + town.link + '" target="blank">' + town.name + '</a>';
+            desc.innerHTML = town.description;
 
-        this.loadGallery(town.images);
+            townNameDivH3.textContent = town.name;
+            const sup = town.region == "" ? town.state : town.region;
+            townNameDivH4.innerHTML = '<i>' + town.country + ", " + sup + '</i>';
 
-        const townMiscRight = this.containerDiv.querySelector("#town_misc_content_right");
-        const ulMajor = townMiscRight.querySelectorAll("li")[0];
-        const ulInhabitants = townMiscRight.querySelectorAll("li")[1];
+            this.loadGallery(town.images);
 
-        ulMajor.textContent = town.major;
-        ulInhabitants.textContent = town.inhabitants;
+            const townMiscRight = this.containerDiv.querySelector("#town_misc_content_right");
+            const ulMajor = townMiscRight.querySelectorAll("li")[0];
+            const ulInhabitants = townMiscRight.querySelectorAll("li")[1];
+
+            ulMajor.textContent = town.major;
+            ulInhabitants.textContent = town.inhabitants;
+        }
+
+
     }
 
-    loadGallery(images){
+    loadGallery(images) {
         const gallery = this.containerDiv.querySelector("#gallery");
         const galleryDivs = gallery.querySelectorAll("div");
         for (const div of galleryDivs) {
@@ -78,24 +85,30 @@ class WorldCities extends AbstractApp {
         }
     }
 
-    searchInputHandler(){
+    searchInputHandler() {
         const value = this.searchIpt.UIView.querySelector("#search_ipt").value;
-        
         this.towns = this.filterElement(this.baseTowns, value);
-        this.refresh();
+        if (this.towns.length > 0) {
+
+            this.refresh();
+        } else {
+            this.loadTown(-1);
+            this.indexer.index = 0;
+            this.indexer.totalItems = 0;
+        }
     }
 
-    clearSearchInputHandler(){
+    clearSearchInputHandler() {
 
     }
 
-    refresh(){
+    refresh() {
         this.indexer.index = 0;
         this.indexer.totalItems = this.towns.length;
         this.loadTown(0);
     }
 
-    filterElement(arr, filter){
+    filterElement(arr, filter) {
         return arr.filter(function (element) {
             const townName = element.name;
             const bool = townName.toLowerCase().includes(filter.toLowerCase());
@@ -103,21 +116,22 @@ class WorldCities extends AbstractApp {
         })
     }
 
-    initInput(){
+    initInput() {
         this.searchIpt = new SearchInput(this.containerDiv.querySelector("#search"));
         this.searchIpt.addEventListener(SearchInputEventNames.SEARCH_INPUT, function () {
             this.searchInputHandler();
         }.bind(this));
+
     }
 
-    indexerIndexChangeHandler(){
+    indexerIndexChangeHandler() {
         this.loadTown(this.indexer.index);
     }
 
-    initIndexer(){
+    initIndexer() {
         const optionsDiv = this.containerDiv.querySelector("#options");
         this.indexer = new Indexer(optionsDiv, this.towns.length, indexerMode.LOOP);
-        this.indexer.addEventListener(IndexerEventNames.INDEX_CHANGED, function(){
+        this.indexer.addEventListener(IndexerEventNames.INDEX_CHANGED, function () {
             this.indexerIndexChangeHandler();
         }.bind(this));
     }
@@ -140,7 +154,7 @@ class SearchInput extends AbstractUIComponent {
 
         // Codez ici les propriétés définies dans le diagramme de classes.
         this.boundSearchInputHandler = this.searchInputHandler.bind(this);
-        
+
         this.boundClearSearchHandler;
         this.init();
     }
@@ -149,7 +163,7 @@ class SearchInput extends AbstractUIComponent {
         return super.value;
     }
 
-    set value(value){
+    set value(value) {
 
     }
 
@@ -237,7 +251,7 @@ class Indexer extends AbstractUIComponent {
     // Adaptation en méthode de la fonction du TP Citations. Déjà codée pour vous. :)
     changeIndex(direction) {
         direction == indexerDirection.NEXT ? this.index++ : this.index--;
-        
+
         this.checkIndex();
     }
 
@@ -262,8 +276,8 @@ class Indexer extends AbstractUIComponent {
         // Codez cette méthode. Adaptation en classe du TP Citation.
         const indexDiv = this.UIView.querySelector("#index");
         indexDiv.textContent = this.getZeroFormat(this.index + 1, this.total) + "/" + this.total;
-        
-        
+
+
     }
 
     // Adaptation en méthode de la fonction du TP Citations. Déjà codée pour vous. :)

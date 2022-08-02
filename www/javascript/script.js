@@ -15,6 +15,7 @@ class WorldCities extends AbstractApp {
     init(dataSource) {
         this.initTowns(dataSource);
         this.initIndexer();
+        this.initInput();
         this.loadTown(0);
         super.init(dataSource);
     }
@@ -78,7 +79,8 @@ class WorldCities extends AbstractApp {
     }
 
     searchInputHandler(){
-
+        
+        
     }
 
     clearSearchInputHandler(){
@@ -94,7 +96,10 @@ class WorldCities extends AbstractApp {
     }
 
     initInput(){
-
+        this.searchIpt = new SearchInput(this.containerDiv.querySelector("#search"));
+        this.searchIpt.addEventListener(SearchInputEventNames.SEARCH_INPUT, function () {
+            this.searchInputHandler();
+        }.bind(this));
     }
 
     indexerIndexChangeHandler(){
@@ -127,7 +132,8 @@ class SearchInput extends AbstractUIComponent {
         super(UIView);
 
         // Codez ici les propriétés définies dans le diagramme de classes.
-        this.boundSearchInputHandler;
+        this.boundSearchInputHandler = this.searchInputHandler.bind(this);
+        
         this.boundClearSearchHandler;
         this.init();
     }
@@ -140,8 +146,10 @@ class SearchInput extends AbstractUIComponent {
 
     }
 
-    searchInputHandler() {
+    searchInputHandler(evt) {
         // Codez cette méthode. Adaptation en classe du TP Citation.
+        console.log(this);
+        this.dispatchEvent(new SearchInputEvent(SearchInputEventNames.SEARCH_INPUT));
     }
 
     clearSearchHandler() {
@@ -154,6 +162,8 @@ class SearchInput extends AbstractUIComponent {
 
     init() {
         // Appelez ici les méthodes d'initialisation du composant décrites dans le diagrammes de classe.
+        this.searchIpt = this.UIView.querySelector("#search_ipt");
+        this.searchIpt.addEventListener(EventNames.INPUT, this.boundSearchInputHandler);
 
         super.init();
     }

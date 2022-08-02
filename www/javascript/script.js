@@ -9,7 +9,8 @@ class WorldCities extends AbstractApp {
     }
 
     set index(value) {
-
+        this.loadTown(value);
+        this.indexer.index = value;
     }
 
     init(dataSource) {
@@ -388,6 +389,21 @@ function appInitHandler(evt) {
  */
 function checkIndex() {
     // Codez cette fonction.
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const index = urlParams.get('index');
+    if(index){
+        const nIndex = parseInt(index);
+        if(!isNaN(nIndex)){
+            if (nIndex < 0) {
+                alert("Paramètre incorrect !\nL'index saisi ne peut être plus petit que 0.");
+            }else{
+                worldCities.index = nIndex
+            }
+        }else{
+            alert("Paramètre incorrect !\nVeuillez vérifier l'index saisi.");
+        }
+    }
 }
 
 function formatNumber(num, locale = "fr-FR"){
